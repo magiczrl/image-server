@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.image.dao.mapper.ImageInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.cn.image.model.ImageInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="image_name" property="imageName" />
+		<result column="image_label" property="imageLabel" />
+		<result column="md5" property="md5" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, image_name, image_label, md5, create_time, update_time
+	</sql>
+
+	<select id="findByMd5" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM image_info WHERE md5=#{md5}
+	</select>
+
+	<select id="deleteByMd5" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		delete from image_info WHERE md5=#{md5}
+	</select>
+
+	<select id="findByImageName" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM image_info WHERE image_name like CONCAT(#{imageName}, '%')
+		order by update_time desc
+	</select>
+
+	<select id="searchImage" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM image_info WHERE 1=1
+		<if test="imageName!=null">
+			AND image_name like CONCAT('%', #{imageName}, '%')
+		</if>
+		<if test="imageLabel!=null">
+			AND image_label = #{imageLabel}
+		</if>
+		order by update_time desc
+		<if test="limitStartIndex!=null and limitPageSize!=null">
+			LIMIT #{limitStartIndex}, #{limitPageSize}
+		</if>
+		
+	</select>
+
+	<select id="findAll" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM image_info limit 5000
+	</select>
+
+	<select id="countImage" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		SELECT count(1) FROM image_info
+	</select>
+
+	<insert id="insert"
+		parameterType="com.cn.image.model.ImageInfo" useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO image_info (
+		image_name, image_label, md5,
+		create_time, update_time
+		) VALUES (
+		#{imageName}, #{imageLabel}, #{md5},
+		#{createTime}, #{updateTime}
+		)
+	</insert>
+
+	<update id="update"
+		parameterType="com.cn.image.model.ImageInfo">
+		UPDATE image_info
+		<set>
+			<if test="imageName != null">
+				image_name = #{imageName},
+			</if>
+			<if test="imageLabel != null">
+				image_label = #{imageLabel},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+</mapper>

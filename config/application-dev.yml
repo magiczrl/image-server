@@ -1,0 +1,63 @@
+server:
+  port: 8080
+  sessionTimeout: 3000
+  servlet:
+    context-path: /prod-api
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 800
+    accesslog:
+      buffered: false
+      enabled: false
+      file-date-format: .yyyy-MM-dd
+      prefix: access_log
+      rename-on-rotate: false
+      request-attributes-enabled: false
+      rotate: true
+      suffix: .log
+      pattern: '%t (%D ms) %a "%r" %s'
+
+spring:
+  aop:
+    auto: true
+    proxy-target-class: true
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: '{mycipher}{encrypted password}'
+    url: jdbc:mysql://{ip}:{port}/image?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 8
+    minIdle: 16
+    maxActive: 32
+    maxWait: 2000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    sql-script-encoding: UTF-8  
+    #打开PSCache，并且指定每个连接上PSCache的大小
+    pool-prepared-statements: true
+    stat-view-servlet:
+      enabled: false
+
+mybatis:
+  mapper-locations: classpath*:mybatis/**/*Mapper.xml
+  type-aliases-package: com.cn.image.model
+
+
+#config log
+logging:
+  config: file:config/logback-spring.xml
+
+redis:
+  servers: :{pwd}@{ip}:{port}
+  pool-max-total: 256
+  pool-max-idle: 16
+  pool-min-idle: 8
+  pool-max-wait-millis: 1000
+
+#zimg访问地址
+imgUrl: http://{ip}:4869

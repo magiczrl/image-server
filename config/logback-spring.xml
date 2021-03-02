@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true">
+
+    <property name="LOG_PATH" value="logs" />
+    <property name="LOG_LEVEL" value="info" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>[%d{yy-MM-dd HH:mm:ss:SSS}][%-5p][%c][%t]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="BIZ"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/biz.log</file>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/biz.log.%d{yyyyMMdd}
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>[%d{yy-MM-dd HH:mm:ss:SSS}][%-5p][%c][%t]%m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="SYSTEM-LOG-FILE"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/system.log</file>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/system.log.%d{yyyyMMdd}
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>[%d{yy-MM-dd HH:mm:ss:SSS}][%-5p][%c][%t]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ATHENA-LOG-FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/athena.log</file>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/athena.log.%d{yyyyMMdd}
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS}%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DATA"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/data.log</file>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/data.log.%d{yyyyMMdd}
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>[%d{yy-MM-dd HH:mm:ss:SSS}][%-5p][%c][%t]%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.cn.image" level="${LOG_LEVEL}" additivity="false">
+        <appender-ref ref="BIZ" />
+    </logger>
+
+    <logger name="com.cn.image.dao" level="${LOG_LEVEL}"
+        additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+
+    <logger name="org.mybatis" level="${LOG_LEVEL}" additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+
+    <logger name="org.apache.ibatis" level="${LOG_LEVEL}"
+        additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+
+    <logger name="org.mybatis.spring" level="${LOG_LEVEL}"
+        additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+
+    <logger name="org.springframework.jdbc" level="${LOG_LEVEL}"
+        additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+    <logger name="org.springframework.orm" level="${LOG_LEVEL}"
+        additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+    <logger name="com.mysql" level="${LOG_LEVEL}" additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+    <logger name="java.sql" level="${LOG_LEVEL}" additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+    <logger name="javax.sql" level="${LOG_LEVEL}" additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+    <logger name="org.apache.http" level="ERROR" additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+    <logger name="log4j.logger.org.apache.http.client" level="INFO"
+        additivity="false">
+        <appender-ref ref="DATA" />
+    </logger>
+
+    <logger name="ATHENA" level="INFO" additivity="false">
+        <appender-ref ref="ATHENA-LOG-FILE"/>
+    </logger>
+
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="SYSTEM-LOG-FILE" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>  
