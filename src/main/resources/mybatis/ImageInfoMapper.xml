@@ -46,7 +46,7 @@
 		<if test="imageLabel!=null">
 			AND image_label = #{imageLabel}
 		</if>
-		order by update_time desc
+		order by update_time desc, id desc
 		<if test="limitStartIndex!=null and limitPageSize!=null">
 			LIMIT #{limitStartIndex}, #{limitPageSize}
 		</if>
