@@ -35,6 +35,7 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency>
+        <!-- 引用tool中jar包  -->
 		<dependency>
 			<groupId>com.cn.aqb</groupId>
 			<artifactId>aqb-cache</artifactId>

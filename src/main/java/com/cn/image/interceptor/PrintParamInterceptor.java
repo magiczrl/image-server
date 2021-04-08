@@ -4,9 +4,7 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cn.image.athena.AthenaLog;
@@ -27,9 +24,7 @@ import com.cn.image.athena.AthenaLogReport;
 import com.cn.image.athena.AthenaType;
 import com.cn.image.common.ActionResponse;
 import com.cn.image.common.BizException;
-import com.cn.image.common.RequestHolder;
 import com.cn.image.common.ResMsg;
-import com.cn.image.common.ResponseHolder;
 
 /**
  * @Desc 
@@ -58,41 +53,36 @@ public class PrintParamInterceptor {
      */
     @Around("interceptor()")
     public Object doAround(ProceedingJoinPoint point) throws Throwable {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+        LocalDateTime requestTime = LocalDateTime.now();
+        Method method = ((MethodSignature) point.getSignature()).getMethod();
+        String signature = com.cn.image.common.tools.MethodSignature.generateSignature(method);
+        Object[] body = point.getArgs();
+        Object obj = null;
         try {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                    .getRequestAttributes()).getRequest();
-            LocalDateTime requestTime = LocalDateTime.now();
-            Method method = ((MethodSignature) point.getSignature()).getMethod();
-            String signature = com.cn.image.common.tools.MethodSignature.generateSignature(method);
-            Object[] body = point.getArgs();
-            Object obj = null;
-            try {
-                obj = point.proceed();
-            } catch (BizException e) {
-                logger.error("exception: {}, errorCode: {}", e.getReturnMessage(),
-                        e.getReturnCode());
-                obj = new ActionResponse();
-                ((ActionResponse) obj).setReturnCodeAndMessage(e.getReturnCode(),
-                        e.getReturnMessage());
-            } catch (Exception e) {
-                obj = new ActionResponse();
-                if (e instanceof HttpRequestMethodNotSupportedException) {
-                    logger.warn(e.getMessage());
-                    ((ActionResponse) obj).setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(),
-                            "Request method error");
-                } else {
-                    logger.error(method.getName() + ": " + e.getMessage(), e);
-                    ((ActionResponse) obj).setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(),
-                            "system error");
-                }
-            } finally {
-                printAthenaLog(request, signature, obj, body, requestTime);
+            obj = point.proceed();
+        } catch (BizException e) {
+            logger.error("exception: {}, errorCode: {}", e.getReturnMessage(),
+                    e.getReturnCode());
+            obj = new ActionResponse();
+            ((ActionResponse) obj).setReturnCodeAndMessage(e.getReturnCode(),
+                    e.getReturnMessage());
+        } catch (Exception e) {
+            obj = new ActionResponse();
+            if (e instanceof HttpRequestMethodNotSupportedException) {
+                logger.warn(e.getMessage());
+                ((ActionResponse) obj).setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(),
+                        "Request method error");
+            } else {
+                logger.error(method.getName() + ": " + e.getMessage(), e);
+                ((ActionResponse) obj).setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(),
+                        "system error");
             }
-            return obj;
         } finally {
-            RequestHolder.clear();
-            ResponseHolder.clear();
+            printAthenaLog(request, signature, obj, body, requestTime);
         }
+        return obj;
     }
 
     private void printAthenaLog(HttpServletRequest httpServletRequest, String signature,
