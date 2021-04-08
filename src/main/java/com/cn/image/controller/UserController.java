@@ -1,8 +1,6 @@
 package com.cn.image.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.cn.image.common.ActionResponse;
-import com.cn.image.common.BizException;
 import com.cn.image.common.Constants;
 import com.cn.image.common.ResMsg;
 import com.cn.image.common.Utils;
@@ -24,7 +21,7 @@ import com.cn.image.service.UserService;
 @RestController
 public class UserController {
 
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+    // private static Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
@@ -38,22 +35,12 @@ public class UserController {
             "application/json;charset=UTF-8" })
     public ActionResponse login(HttpServletRequest request, @RequestBody JSONObject requestJson) {
         ActionResponse ar = new ActionResponse();
-        try {
-            String ip = Utils.getIpAddr(request);
-            String username = requestJson.getString("username");
-            String password = requestJson.getString("password");
-            ar.setData(userService.login(ip, username, password));
-            ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
-                    ResMsg.SUCCESS.getReturnMessage());
-            return ar;
-        } catch (BizException e) {
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(e.getReturnCode(), e.getReturnMessage());
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(), "system error");
-        }
+        String ip = Utils.getIpAddr(request);
+        String username = requestJson.getString("username");
+        String password = requestJson.getString("password");
+        ar.setData(userService.login(ip, username, password));
+        ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
+                ResMsg.SUCCESS.getReturnMessage());
         return ar;
     }
 
@@ -67,19 +54,9 @@ public class UserController {
             "application/json;charset=UTF-8" })
     public ActionResponse genPublicKey(HttpServletRequest request) {
         ActionResponse ar = new ActionResponse();
-        try {
-            ar.setData("\"-----BEGIN PUBLIC KEY-----" + Constants.PUB_KEY + "-----END PUBLIC KEY-----\"");
-            ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
-                    ResMsg.SUCCESS.getReturnMessage());
-            return ar;
-        } catch (BizException e) {
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(e.getReturnCode(), e.getReturnMessage());
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(), "system error");
-        }
+        ar.setData("\"-----BEGIN PUBLIC KEY-----" + Constants.PUB_KEY + "-----END PUBLIC KEY-----\"");
+        ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
+                ResMsg.SUCCESS.getReturnMessage());
         return ar;
     }
 }

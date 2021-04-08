@@ -42,19 +42,9 @@ public class ImageController {
     @Auth
     public ActionResponse upload(@RequestParam(value = "file", required = false) MultipartFile file) {
         ActionResponse ar = new ActionResponse();
-        try {
-            ar.setData(imageService.upload(file, "1"));
-            ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
-                    ResMsg.SUCCESS.getReturnMessage());
-            return ar;
-        } catch (BizException e) {
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(e.getReturnCode(), e.getReturnMessage());
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(), "system error");
-        }
+        ar.setData(imageService.upload(file, "1"));
+        ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
+                ResMsg.SUCCESS.getReturnMessage());
         return ar;
     }
 
@@ -68,19 +58,9 @@ public class ImageController {
             "application/json;charset=UTF-8" })
     public ActionResponse uploadInnerForward(@RequestParam(value = "file", required = false) MultipartFile file) {
         ActionResponse ar = new ActionResponse();
-        try {
-            ar.setData(imageService.upload(file, "banner"));
-            ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
-                    ResMsg.SUCCESS.getReturnMessage());
-            return ar;
-        } catch (BizException e) {
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(e.getReturnCode(), e.getReturnMessage());
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(), "system error");
-        }
+        ar.setData(imageService.upload(file, "banner"));
+        ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
+                ResMsg.SUCCESS.getReturnMessage());
         return ar;
     }
 
@@ -97,19 +77,9 @@ public class ImageController {
                                   @RequestParam(required = false) String pageNum,
                                   @RequestParam(required = false) String pageSize) {
         ActionResponse ar = new ActionResponse();
-        try {
-            ar.setData(imageService.imgList(imageName, imageLabel, pageNum, pageSize));
-            ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
-                    ResMsg.SUCCESS.getReturnMessage());
-            return ar;
-        } catch (BizException e) {
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(e.getReturnCode(), e.getReturnMessage());
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(), "system error");
-        }
+        ar.setData(imageService.imgList(imageName, imageLabel, pageNum, pageSize));
+        ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
+                ResMsg.SUCCESS.getReturnMessage());
         return ar;
     }
 
@@ -124,19 +94,9 @@ public class ImageController {
     @Auth
     public ActionResponse findAllImageLabel() {
         ActionResponse ar = new ActionResponse();
-        try {
-            ar.setData(imageService.getAllImageLabel());
-            ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
-                    ResMsg.SUCCESS.getReturnMessage());
-            return ar;
-        } catch (BizException e) {
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(e.getReturnCode(), e.getReturnMessage());
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            ar.setData(new JSONObject());
-            ar.setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(), "system error");
-        }
+        ar.setData(imageService.getAllImageLabel());
+        ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
+                ResMsg.SUCCESS.getReturnMessage());
         return ar;
     }
 
@@ -151,18 +111,10 @@ public class ImageController {
     public ActionResponse deleteByMd5(@RequestBody JSONObject md5Json) {
         ActionResponse ar = new ActionResponse();
         ar.setData(new JSONObject());
-        try {
-            JSONArray md5Array = md5Json.getJSONArray("md5");
-            imageService.deleteByMd5(md5Array);
-            ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
-                    ResMsg.SUCCESS.getReturnMessage());
-            return ar;
-        } catch (BizException e) {
-            ar.setReturnCodeAndMessage(e.getReturnCode(), e.getReturnMessage());
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            ar.setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(), "system error");
-        }
+        JSONArray md5Array = md5Json.getJSONArray("md5");
+        imageService.deleteByMd5(md5Array);
+        ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
+                ResMsg.SUCCESS.getReturnMessage());
         return ar;
     }
 
@@ -178,20 +130,12 @@ public class ImageController {
     public ActionResponse updateImageInfo(@RequestBody JSONObject requestJson) {
         ActionResponse ar = new ActionResponse();
         ar.setData(new JSONObject());
-        try {
-            String imageLabel = requestJson.getString("imageLabel");
-            String imageName = requestJson.getString("imageName");
-            String md5 = requestJson.getString("md5");
-            imageService.updateImageInfo(imageLabel, imageName, md5);
-            ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
-                    ResMsg.SUCCESS.getReturnMessage());
-            return ar;
-        } catch (BizException e) {
-            ar.setReturnCodeAndMessage(e.getReturnCode(), e.getReturnMessage());
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            ar.setReturnCodeAndMessage(ResMsg.FAIL.getReturnCode(), "system error");
-        }
+        String imageLabel = requestJson.getString("imageLabel");
+        String imageName = requestJson.getString("imageName");
+        String md5 = requestJson.getString("md5");
+        imageService.updateImageInfo(imageLabel, imageName, md5);
+        ar.setReturnCodeAndMessage(ResMsg.SUCCESS.getReturnCode(),
+                ResMsg.SUCCESS.getReturnMessage());
         return ar;
     }
 
