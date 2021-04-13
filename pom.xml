@@ -36,11 +36,13 @@
 			<artifactId>commons-codec</artifactId>
 		</dependency>
         <!-- 引用tool中jar包  -->
-		<dependency>
-			<groupId>com.cn.aqb</groupId>
-			<artifactId>aqb-cache</artifactId>
-			<version>2.0.2</version>
-		</dependency>
+        <dependency>
+          <groupId>com.cn.aqb</groupId>
+          <artifactId>aqb-cache</artifactId>
+          <version>2.0.2</version>
+          <scope>system</scope>
+          <systemPath>${project.basedir}/tool/aqb-cache-2.0.2.jar</systemPath>
+        </dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
