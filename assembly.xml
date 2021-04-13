@@ -19,6 +19,13 @@
             <directory>config</directory>
             <outputDirectory>./config</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>tool</directory>
+            <outputDirectory>./lib</outputDirectory>
+            <includes>
+                <include>aqb-cache-2.0.2.jar</include>
+            </includes>
+        </fileSet>
     </fileSets>
     <dependencySets>
         <dependencySet>
